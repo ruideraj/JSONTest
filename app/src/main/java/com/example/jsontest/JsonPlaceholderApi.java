@@ -1,6 +1,8 @@
 package com.example.jsontest;
 
 import com.example.jsontest.comments.Comment;
+import com.example.jsontest.albums.Album;
+import com.example.jsontest.photos.Photo;
 import com.example.jsontest.posts.Post;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -20,4 +22,9 @@ public interface JsonPlaceholderApi {
     @GET("comments")
     Call<List<Comment>> getCommentsQuery(@Query("postId") int postId);
 
+    @GET("albums")
+    Call<List<Album>> getAlbums();
+
+    @GET("albums/{albumId}/photos")
+    Call<List<Photo>> getAlbumPhotos(@Path("albumId") int albumId);
 }

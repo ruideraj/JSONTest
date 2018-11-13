@@ -1,4 +1,4 @@
-package com.example.jsontest.posts;
+package com.example.jsontest.albums;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -7,39 +7,40 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 import com.example.jsontest.R;
 import com.example.jsontest.ViewModelFactory;
-import com.example.jsontest.comments.CommentsActivity;
+import com.example.jsontest.photos.PhotosActivity;
 
-public class PostsActivity extends AppCompatActivity {
+public class AlbumsActivity extends AppCompatActivity {
 
     private RecyclerView mRecycler;
-    private PostsAdapter mAdapter;
+    private AlbumsAdapter mAdapter;
 
-    private PostsViewModel mViewModel;
+    private AlbumsViewModel mViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_list);
 
         mViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication()))
-                .get(PostsViewModel.class);
+                .get(AlbumsViewModel.class);
 
         mRecycler = findViewById(R.id.list_recycler);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecycler.setLayoutManager(layoutManager);
-        mAdapter = new PostsAdapter(mViewModel);
+        mAdapter = new AlbumsAdapter(mViewModel);
         mRecycler.setAdapter(mAdapter);
 
-        mViewModel.postList.observe(this, list -> mAdapter.setData(list));
+        mViewModel.albums.observe(this, albums -> mAdapter.setData(albums));
 
-        mViewModel.clickedPost.observe(this, post -> {
-            Intent intent = new Intent(this, CommentsActivity.class);
-            intent.putExtra(CommentsActivity.EXTRA_POST, post);
-            startActivity(intent);
+        mViewModel.clickedAlbum.observe(this, album -> {
+            if(album != null) {
+                Intent intent = new Intent(this, PhotosActivity.class);
+                intent.putExtra(PhotosActivity.EXTRA_ALBUM, album);
+                startActivity(intent);
+            }
         });
     }
 

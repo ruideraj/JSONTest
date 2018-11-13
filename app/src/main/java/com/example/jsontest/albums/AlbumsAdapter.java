@@ -1,4 +1,4 @@
-package com.example.jsontest.posts;
+package com.example.jsontest.albums;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +10,12 @@ import com.example.jsontest.R;
 
 import java.util.List;
 
-public class PostAdapter extends RecyclerView.Adapter {
+public class AlbumsAdapter extends RecyclerView.Adapter {
 
-    private PostViewModel mViewModel;
-    private List<Post> mData;
+    private AlbumsViewModel mViewModel;
+    private List<Album> mData;
 
-    public PostAdapter(PostViewModel viewModel) {
+    public AlbumsAdapter(AlbumsViewModel viewModel) {
         mViewModel = viewModel;
     }
 
@@ -23,7 +23,7 @@ public class PostAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.main_post_item, parent, false);
+        View view = inflater.inflate(R.layout.album_item, parent, false);
 
         return new ViewHolder(view);
     }
@@ -32,10 +32,9 @@ public class PostAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         ViewHolder vh = (ViewHolder) viewHolder;
 
-        Post post = mData.get(position);
+        Album album = mData.get(position);
 
-        vh.title.setText(post.getTitle());
-        vh.body.setText(post.getBody());
+        vh.title.setText(album.getTitle());
     }
 
     @Override
@@ -43,7 +42,7 @@ public class PostAdapter extends RecyclerView.Adapter {
         return mData == null ? 0 : mData.size();
     }
 
-    public void setData(List<Post> list) {
+    public void setData(List<Album> list) {
         mData = list;
         notifyDataSetChanged();
     }
@@ -51,13 +50,11 @@ public class PostAdapter extends RecyclerView.Adapter {
     private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView title;
-        TextView body;
 
         public ViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            title = view.findViewById(R.id.main_item_title);
-            body = view.findViewById(R.id.main_item_body);
+            title = view.findViewById(R.id.album_title);
         }
 
         @Override
@@ -66,5 +63,5 @@ public class PostAdapter extends RecyclerView.Adapter {
             mViewModel.onClick(position);
         }
     }
-
+    
 }

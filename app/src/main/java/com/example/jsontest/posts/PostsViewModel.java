@@ -2,25 +2,26 @@ package com.example.jsontest.posts;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import com.example.jsontest.JsonPlaceholderApi;
 import com.example.jsontest.SingleLiveEvent;
 
 import java.util.List;
 
-public class PostViewModel extends ViewModel {
+public class PostsViewModel extends ViewModel {
 
     public MutableLiveData<List<Post>> postList;
     public SingleLiveEvent<Post> clickedPost = new SingleLiveEvent<>();
 
-    private PostRepository mPostRepository;
+    private PostsRepository mPostsRepository;
 
-    public PostViewModel() {
-        mPostRepository = new PostRepository();
-        postList = mPostRepository.getPostList();
+    public PostsViewModel(JsonPlaceholderApi api) {
+        mPostsRepository = new PostsRepository(api);
+        postList = mPostsRepository.getPostList();
     }
 
     public void start() {
         if(postList.getValue() == null) {
-            mPostRepository.loadPostList();
+            mPostsRepository.loadPostList();
         }
     }
 

@@ -10,7 +10,7 @@ import com.example.jsontest.R;
 
 import java.util.List;
 
-public class CommentAdapter extends RecyclerView.Adapter {
+public class CommentsAdapter extends RecyclerView.Adapter {
 
     private List<Comment> comments;
 

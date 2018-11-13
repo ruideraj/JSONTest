@@ -2,6 +2,8 @@ package com.example.jsontest.comments;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import com.example.jsontest.JsonPlaceholderApi;
+import com.example.jsontest.SingleLiveEvent;
 import com.example.jsontest.posts.Post;
 
 import java.util.List;
@@ -12,10 +14,12 @@ public class CommentsViewModel extends ViewModel {
 
     public MutableLiveData<String> postTitle = new MutableLiveData<>();
     public MutableLiveData<List<Comment>> comments;
+    public SingleLiveEvent<String> toast;
 
-    public CommentsViewModel() {
-        mRepository = new CommentsRepository();
+    public CommentsViewModel(JsonPlaceholderApi api) {
+        mRepository = new CommentsRepository(api);
         comments = mRepository.getComments();
+        toast = mRepository.getToast();
     }
 
     public void start(Post post) {

@@ -1,4 +1,4 @@
-package com.example.jsontest.comments;
+package com.example.jsontest.photos;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
@@ -13,65 +13,65 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-public class CommentsRepository {
+public class PhotosRepository {
 
-    private final JsonPlaceholderApi mJsonApi;
+    private JsonPlaceholderApi mJsonApi;
     private final Executor mExecutor;
     private final Handler mHandler;
 
-    private final MutableLiveData<List<Comment>> mComments = new MutableLiveData<>();
+    private final MutableLiveData<List<Photo>> mPhotos = new MutableLiveData<>();
     private final SingleLiveEvent<String> mToast = new SingleLiveEvent<>();
 
-    public CommentsRepository(JsonPlaceholderApi api) {
+    public PhotosRepository(JsonPlaceholderApi api) {
         mJsonApi = api;
 
         mExecutor = AsyncTask.THREAD_POOL_EXECUTOR;
         mHandler = new Handler(Looper.getMainLooper());
     }
 
-    public MutableLiveData<List<Comment>> getComments() {
-        return mComments;
+    public MutableLiveData<List<Photo>> getPhotos() {
+        return mPhotos;
     }
 
     public SingleLiveEvent<String> getToast() {
         return mToast;
     }
 
-    public void loadComments(int postId) {
-        LoadCommentsTask task = new LoadCommentsTask(postId);
+    public void loadPhotos(int albumId) {
+        LoadPhotosTask task = new LoadPhotosTask(albumId);
         mExecutor.execute(task);
     }
 
-    private class LoadCommentsTask implements Runnable {
-        private int mPostId;
+    private class LoadPhotosTask implements Runnable {
+        private int mAlbumId;
 
-        public LoadCommentsTask(int postId) {
-            mPostId = postId;
+        public LoadPhotosTask(int albumId) {
+            mAlbumId = albumId;
         }
 
         @Override
         public void run() {
-            Call<List<Comment>> commentsCall = mJsonApi.getCommentsQuery(mPostId);
-            List<Comment> list = null;
+            Call<List<Photo>> photosCall = mJsonApi.getAlbumPhotos(mAlbumId);
+            List<Photo> list = null;
             Exception e = null;
             try {
-                Response<List<Comment>> response = commentsCall.execute();
+                Response<List<Photo>> response = photosCall.execute();
                 list = response.body();
             }
             catch(IOException io) {
                 e = io;
             }
 
-            CommentsUpdateTask updateTask = new CommentsUpdateTask(list, e);
+            PhotosUpdateTask updateTask = new PhotosUpdateTask(list, e);
             mHandler.post(updateTask);
         }
     }
 
-    private class CommentsUpdateTask implements Runnable {
-        private List<Comment> mList;
+    private class PhotosUpdateTask implements Runnable {
+        private List<Photo> mList;
         private Exception mException;
 
-        public CommentsUpdateTask(List<Comment> list, Exception e) {
+        public PhotosUpdateTask(List<Photo> list, Exception e) {
             mList = list;
             mException = e;
         }
@@ -79,7 +79,7 @@ public class CommentsRepository {
         @Override
         public void run() {
             if(mList != null) {
-                mComments.setValue(mList);
+                mPhotos.setValue(mList);
             }
             if(mException != null) {
                 mToast.setValue("An error occurred");
