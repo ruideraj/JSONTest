@@ -10,15 +10,22 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginBottom="32dp"
-        android:text="@string/main_posts"/>
+        android:text="@string/title_posts"/>
 
     <Button
         android:id="@+id/main_button_albums"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="12dp"
-        android:text="@string/main_albums"/>
+        android:layout_marginBottom="32dp"
+        android:text="@string/title_albums"/>
+
+    <Button
+        android:id="@+id/main_button_users"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/title_users"/>
 
 </LinearLayout>
 

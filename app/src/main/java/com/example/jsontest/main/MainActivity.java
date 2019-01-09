@@ -8,6 +8,7 @@ import android.view.View;
 import com.example.jsontest.R;
 import com.example.jsontest.albums.AlbumsActivity;
 import com.example.jsontest.posts.PostsActivity;
+import com.example.jsontest.users.UsersActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         findViewById(R.id.main_button_posts).setOnClickListener(this);
         findViewById(R.id.main_button_albums).setOnClickListener(this);
+        findViewById(R.id.main_button_users).setOnClickListener(this);
     }
 
     @Override
@@ -27,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.main_button_albums:
                 startActivity(new Intent(this, AlbumsActivity.class));
+                break;
+            case R.id.main_button_users:
+                startActivity(new Intent(this, UsersActivity.class));
                 break;
         }
     }
