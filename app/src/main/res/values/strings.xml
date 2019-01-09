@@ -1,6 +1,15 @@
 <resources>
+    <string name="json_api_url">https://jsonplaceholder.typicode.com/</string>
+
     <string name="app_name">JSONTest</string>
 
-    <string name="main_posts">Posts</string>
-    <string name="main_albums">Albums</string>
+    <string name="title_posts">Posts</string>
+    <string name="title_albums">Albums</string>
+    <string name="title_users">Users</string>
+    <string name="title_comments">Comments</string>
+    <string name="title_photos">Photos</string>
+
+    <string name="users_error">Error getting users</string>
+    <string name="user_details_todos_error">Error getting user\'s todo list</string>
+
 </resources>

@@ -1,46 +1,26 @@
 package com.example.jsontest;
 
-import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.content.Context;
 import android.support.annotation.NonNull;
-import com.example.jsontest.comments.CommentsViewModel;
 import com.example.jsontest.albums.AlbumsViewModel;
+import com.example.jsontest.comments.CommentsViewModel;
 import com.example.jsontest.photos.PhotosViewModel;
 import com.example.jsontest.posts.PostsViewModel;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import com.example.jsontest.users.UserDetailsRepository;
+import com.example.jsontest.users.UserDetailsViewModel;
+import com.example.jsontest.users.UsersRepository;
+import com.example.jsontest.users.UsersViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
-    private static final String API_BASE_URL = "https://jsonplaceholder.typicode.com/";
-
-    private static volatile ViewModelFactory INSTANCE;
-    private static final Object sLock = new Object();
-
-    private Application mApplication;
+    private Runner mRunner;
     private JsonPlaceholderApi mJsonApi;
 
-    public static ViewModelFactory getInstance(Application application) {
-        if(INSTANCE == null) {
-            synchronized(sLock) {
-                if(INSTANCE == null) {
-                    INSTANCE = new ViewModelFactory(application);
-                }
-            }
-        }
-
-        return INSTANCE;
-    }
-
-    private ViewModelFactory(Application application) {
-        mApplication = application;
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        mJsonApi = retrofit.create(JsonPlaceholderApi.class);
+    public ViewModelFactory(Context context) {
+        mRunner = ((JsonTestApplication) context.getApplicationContext()).getRunner();
+        mJsonApi = ((JsonTestApplication) context.getApplicationContext()).getJsonApi();
     }
 
     @NonNull
@@ -62,6 +42,18 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         else if(modelClass.isAssignableFrom(PhotosViewModel.class)) {
             //noinspection unchecked
             return (T) new PhotosViewModel(mJsonApi);
+        }
+        else if(modelClass.isAssignableFrom(UsersViewModel.class)) {
+            UsersRepository repository = new UsersRepository(mRunner, mJsonApi);
+
+            //noinspection unchecked
+            return (T) new UsersViewModel(repository);
+        }
+        else if(modelClass.isAssignableFrom(UserDetailsViewModel.class)) {
+            UserDetailsRepository repository = new UserDetailsRepository(mRunner, mJsonApi);
+
+            //noinspection unchecked
+            return (T) new UserDetailsViewModel(repository);
         }
 
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());

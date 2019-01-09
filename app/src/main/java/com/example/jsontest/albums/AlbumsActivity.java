@@ -24,7 +24,7 @@ public class AlbumsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        mViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication()))
+        mViewModel = ViewModelProviders.of(this, new ViewModelFactory(this))
                 .get(AlbumsViewModel.class);
 
         mRecycler = findViewById(R.id.list_recycler);

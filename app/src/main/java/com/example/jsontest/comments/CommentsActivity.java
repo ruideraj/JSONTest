@@ -34,7 +34,7 @@ public class CommentsActivity extends AppCompatActivity {
         mAdapter = new CommentsAdapter();
         mRecycler.setAdapter(mAdapter);
 
-        mViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication()))
+        mViewModel = ViewModelProviders.of(this, new ViewModelFactory(this))
                 .get(CommentsViewModel.class);
 
         mViewModel.postTitle.observe(this, title -> {

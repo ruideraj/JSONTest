@@ -39,7 +39,7 @@ public class PhotosActivity extends AppCompatActivity {
         mAdapter = new PhotosAdapter(this);
         recycler.setAdapter(mAdapter);
 
-        mViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication()))
+        mViewModel = ViewModelProviders.of(this, new ViewModelFactory(this))
                 .get(PhotosViewModel.class);
 
         mViewModel.photos.observe(this, photos -> mAdapter.setData(photos));

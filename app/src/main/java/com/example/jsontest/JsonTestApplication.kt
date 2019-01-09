@@ -1,0 +1,31 @@
+package com.example.jsontest
+
+import android.app.Application
+import android.os.AsyncTask
+import android.os.Handler
+import android.os.Looper
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+class JsonTestApplication : Application() {
+
+    private lateinit var mRunner : Runner
+    private lateinit var mJsonApi : JsonPlaceholderApi
+
+    override fun onCreate() {
+        super.onCreate()
+
+        val executor = AsyncTask.THREAD_POOL_EXECUTOR
+        val handler = Handler(Looper.getMainLooper())
+        mRunner = Runner(handler, executor)
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(getString(R.string.json_api_url))
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        mJsonApi = retrofit.create(JsonPlaceholderApi::class.java)
+    }
+
+    fun getRunner() = mRunner
+    fun getJsonApi() = mJsonApi
+}
