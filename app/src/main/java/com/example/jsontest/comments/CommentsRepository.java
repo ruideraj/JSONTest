@@ -5,12 +5,17 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import com.example.jsontest.JsonPlaceholderApi;
+import com.example.jsontest.Runner;
 import com.example.jsontest.SingleLiveEvent;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
 public class CommentsRepository {
@@ -18,6 +23,7 @@ public class CommentsRepository {
     private final JsonPlaceholderApi mJsonApi;
     private final Executor mExecutor;
     private final Handler mHandler;
+    private final Runner mRunner;
 
     private final MutableLiveData<List<Comment>> mComments = new MutableLiveData<>();
     private final SingleLiveEvent<String> mToast = new SingleLiveEvent<>();
@@ -27,6 +33,8 @@ public class CommentsRepository {
 
         mExecutor = AsyncTask.THREAD_POOL_EXECUTOR;
         mHandler = new Handler(Looper.getMainLooper());
+
+        mRunner = new Runner(mHandler, mExecutor);
     }
 
     public MutableLiveData<List<Comment>> getComments() {
@@ -38,8 +46,36 @@ public class CommentsRepository {
     }
 
     public void loadComments(int postId) {
-        LoadCommentsTask task = new LoadCommentsTask(postId);
-        mExecutor.execute(task);
+//        LoadCommentsTask task = new LoadCommentsTask(postId);
+//        mExecutor.execute(task);
+
+        mRunner.runNetwork(() -> getComments(postId),
+                this::setComments,
+                throwable -> mToast.setValue("An error occurred"));
+
+//        Observable.fromCallable(() -> getComments(postId))
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(mComments::setValue, throwable -> mToast.setValue("An error occurred"));
+    }
+
+    private void setComments(List<Comment> list) {
+        mComments.setValue(list);
+    }
+
+    private List<Comment> getComments(int postId) throws Exception {
+        Call<List<Comment>> commentsCall = mJsonApi.getCommentsQuery(postId);
+        List<Comment> list;
+        try {
+            Response<List<Comment>> response = commentsCall.execute();
+            list = response.body();
+        }
+        catch(IOException io) {
+            // TODO Could include logic for handling different HTTP status codes
+            throw io;
+        }
+
+        return list;
     }
 
     private class LoadCommentsTask implements Runnable {
