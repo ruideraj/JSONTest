@@ -1,7 +1,7 @@
 package com.example.jsontest.users
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.jsontest.SingleLiveEvent
 
 class UsersViewModel(private val repository : UsersRepository) : ViewModel() {

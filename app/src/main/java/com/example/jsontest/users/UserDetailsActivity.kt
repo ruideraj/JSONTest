@@ -1,15 +1,15 @@
 package com.example.jsontest.users
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jsontest.R
 import com.example.jsontest.ViewModelFactory
 
@@ -38,7 +38,7 @@ class UserDetailsActivity : AppCompatActivity() {
 
         mRecycler = findViewById(R.id.user_detail_recycler)
         val layoutManager = LinearLayoutManager(this)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        layoutManager.orientation = RecyclerView.VERTICAL
         mRecycler.layoutManager = layoutManager
         mAdapter = UserTodoAdapter()
         mRecycler.adapter = mAdapter

@@ -1,6 +1,6 @@
 package com.example.jsontest.posts;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import com.example.jsontest.JsonPlaceholderApi;
 import retrofit2.Call;

@@ -1,7 +1,7 @@
 package com.example.jsontest.photos;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import com.example.jsontest.JsonPlaceholderApi;
 import com.example.jsontest.SingleLiveEvent;
 import com.example.jsontest.albums.Album;

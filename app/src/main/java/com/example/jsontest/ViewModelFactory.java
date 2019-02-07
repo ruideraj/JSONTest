@@ -1,9 +1,9 @@
 package com.example.jsontest;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.example.jsontest.albums.AlbumsViewModel;
 import com.example.jsontest.comments.CommentsViewModel;
 import com.example.jsontest.photos.PhotosViewModel;

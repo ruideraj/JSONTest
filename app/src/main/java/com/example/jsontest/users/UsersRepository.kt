@@ -1,6 +1,6 @@
 package com.example.jsontest.users
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.jsontest.JsonPlaceholderApi
 import com.example.jsontest.R
 import com.example.jsontest.Runner
