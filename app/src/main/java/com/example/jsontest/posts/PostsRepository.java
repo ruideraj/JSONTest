@@ -1,8 +1,9 @@
 package com.example.jsontest.posts;
 
 import androidx.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
+import com.example.jsontest.AppDatabase;
 import com.example.jsontest.JsonPlaceholderApi;
+import com.example.jsontest.Runner;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -12,11 +13,15 @@ import java.util.List;
 public class PostsRepository {
 
     private JsonPlaceholderApi mJsonApi;
+    private AppDatabase mDatabase;
+    private Runner mRunner;
 
     private final MutableLiveData<List<Post>> mPostList = new MutableLiveData<>();
 
-    public PostsRepository(JsonPlaceholderApi api) {
+    public PostsRepository(JsonPlaceholderApi api, AppDatabase appDb, Runner runner) {
         mJsonApi = api;
+        mDatabase = appDb;
+        mRunner = runner;
     }
 
     public MutableLiveData<List<Post>> getPostList() {
@@ -24,31 +29,43 @@ public class PostsRepository {
     }
 
     public void loadPostList() {
-        LoadPostListTask task = new LoadPostListTask();
-        task.execute();
+        mRunner.runBackground(new LoadPostList());
     }
 
-    private class LoadPostListTask extends AsyncTask<Void, Void, List<Post>> {
+    private class LoadPostList implements Runnable {
         @Override
-        protected List<Post> doInBackground(Void... voids) {
+        public void run() {
+            List<Post> list = mDatabase.postDao().getAll();
 
-            List<Post> list = null;
-            Call<List<Post>> postCall = mJsonApi.getPosts();
-            Response<List<Post>> postResponse;
-            try {
-                postResponse = postCall.execute();
-                list = postResponse.body();
-            }
-            catch(IOException io) {
-                io.printStackTrace();
+            if(list.isEmpty()) {
+                Call<List<Post>> postCall = mJsonApi.getPosts();
+                Response<List<Post>> postResponse;
+                try {
+                    postResponse = postCall.execute();
+                    list = postResponse.body();
+
+                    mDatabase.postDao().insertPostList(list);
+                }
+                catch(IOException io) {
+                    io.printStackTrace();
+                }
             }
 
-            return list;
+            mRunner.runUi(new UpdatePostList(list));
+        }
+    }
+
+    private class UpdatePostList implements Runnable {
+        private List<Post> mList;
+
+        public UpdatePostList(List<Post> list) {
+            mList = list;
         }
 
         @Override
-        protected void onPostExecute(List<Post> posts) {
-            mPostList.setValue(posts);
+        public void run() {
+            // TODO Implement error handling logic
+            mPostList.setValue(mList);
         }
     }
 }

@@ -17,10 +17,12 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private Runner mRunner;
     private JsonPlaceholderApi mJsonApi;
+    private AppDatabase mDb;
 
     public ViewModelFactory(Context context) {
         mRunner = ((JsonTestApplication) context.getApplicationContext()).getRunner();
         mJsonApi = ((JsonTestApplication) context.getApplicationContext()).getJsonApi();
+        mDb = ((JsonTestApplication) context.getApplicationContext()).getDatabase();
     }
 
     @NonNull
@@ -29,7 +31,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
         if(modelClass.isAssignableFrom(PostsViewModel.class)) {
             //noinspection unchecked
-            return (T) new PostsViewModel(mJsonApi);
+            return (T) new PostsViewModel(mJsonApi, mDb, mRunner);
         }
         else if(modelClass.isAssignableFrom(CommentsViewModel.class)) {
             //noinspection unchecked

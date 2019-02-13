@@ -2,14 +2,21 @@ package com.example.jsontest.posts
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class Post(val userId : Int, val id : Int, val title : String, val body : String) : Parcelable {
+@Entity
+data class Post(@PrimaryKey val id : Int,
+                @ColumnInfo(name = "user_id") val userId : Int,
+                @ColumnInfo(name = "title") val title : String,
+                @ColumnInfo(name = "body") val body : String) : Parcelable {
 
     override fun describeContents(): Int = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeInt(this.userId)
         dest.writeInt(this.id)
+        dest.writeInt(this.userId)
         dest.writeString(this.title)
         dest.writeString(this.body)
     }

@@ -2,7 +2,9 @@ package com.example.jsontest.posts;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.example.jsontest.AppDatabase;
 import com.example.jsontest.JsonPlaceholderApi;
+import com.example.jsontest.Runner;
 import com.example.jsontest.SingleLiveEvent;
 
 import java.util.List;
@@ -14,8 +16,8 @@ public class PostsViewModel extends ViewModel {
 
     private PostsRepository mPostsRepository;
 
-    public PostsViewModel(JsonPlaceholderApi api) {
-        mPostsRepository = new PostsRepository(api);
+    public PostsViewModel(JsonPlaceholderApi api, AppDatabase db, Runner runner) {
+        mPostsRepository = new PostsRepository(api, db, runner);
         postList = mPostsRepository.getPostList();
     }
 
